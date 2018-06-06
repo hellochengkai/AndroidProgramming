@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="click_button">
+        点击
+    </string>
+    <string name="toast_string">
+        我是吐司
+    </string>
+</resources>
