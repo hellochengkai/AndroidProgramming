@@ -1,13 +1,16 @@
 <resources>
     <string name="app_name">CriminalIntent</string>
-    <!--<string name="crime_title_hint">Enter a title for the crime.</string>-->
-    <!--<string name="crime_title_label">Title</string>-->
-    <!--<string name="crime_details_label">Details</string>-->
-    <!--<string name="crime_solved_label">Solved</string>-->
-    <string name="crime_title_hint">输入一个陋习标题.</string>
-    <string name="crime_title_label">标题</string>
-    <string name="crime_details_label">描述</string>
-    <string name="crime_solved_label">解决</string>
-    <string name="crime">陋习</string>
-    <string name="call_110">报警</string>
+    <string name="crime_title_hint">Enter a title for the crime.</string>
+    <string name="crime_title_label">Title</string>
+    <string name="crime_details_label">Details</string>
+    <string name="crime_solved_label">Solved</string>
+    <string name="crime">Crime</string>
+    <string name="call_110">Call 110</string>
+
+    <!--<string name="crime_title_hint">输入一个陋习标题.</string>-->
+    <!--<string name="crime_title_label">标题</string>-->
+    <!--<string name="crime_details_label">描述</string>-->
+    <!--<string name="crime_solved_label">解决</string>-->
+    <!--<string name="crime">陋习</string>-->
+    <!--<string name="call_110">报警</string>-->
 </resources>

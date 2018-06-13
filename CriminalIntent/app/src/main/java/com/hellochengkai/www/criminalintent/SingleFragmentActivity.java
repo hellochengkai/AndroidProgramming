@@ -12,10 +12,12 @@ import android.util.Log;
  */
 
 public abstract class SingleFragmentActivity extends AppCompatActivity {
+
     protected abstract Fragment createFragment();
 
     private static final String TAG = "SingleFragmentActivity";
     FragmentManager fragmentManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,15 +25,14 @@ public abstract class SingleFragmentActivity extends AppCompatActivity {
         fragmentManager = getSupportFragmentManager();
         addFragment(R.id.fragment_container);
     }
-    private void addFragment(int rID)
-    {
+
+    private void addFragment(int rID) {
         Fragment fragment = fragmentManager.findFragmentById(rID);
-        if(fragment == null){
+        if (fragment == null) {
             Log.d(TAG, "onCreate: new CrimeFragment(); ");
             fragment = createFragment();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             fragmentTransaction.add(rID, fragment).commit();
         }
     }
-
 }

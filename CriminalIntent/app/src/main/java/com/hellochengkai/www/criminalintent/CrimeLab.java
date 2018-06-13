@@ -14,6 +14,7 @@ import java.util.UUID;
 public class CrimeLab {
     private List crimeList = new ArrayList();
     Context context;
+
     private CrimeLab(Context context) {
         crimeList = new ArrayList<Crime>();
         this.context = context;
@@ -47,11 +48,11 @@ public class CrimeLab {
         return crimeList;
     }
 
-    public Crime getCrime(UUID id){
+    public Crime getCrime(UUID id) {
         Iterator iterator = crimeList.iterator();
-        while (iterator.hasNext()){
+        while (iterator.hasNext()) {
             Crime crime = (Crime) iterator.next();
-            if(crime.getmId().equals(id)){
+            if (crime.getmId().equals(id)) {
                 return crime;
             }
         }

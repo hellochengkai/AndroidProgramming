@@ -16,21 +16,33 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 
+import java.util.UUID;
+
 /**
  * Created by chengkai on 18-6-12.
  */
 
-public class CrimeFragment extends Fragment implements TextWatcher ,CompoundButton.OnCheckedChangeListener {
-
+public class CrimeFragment extends Fragment implements TextWatcher, CompoundButton.OnCheckedChangeListener {
+    private static final String ARG_CRIME_ID = "crime_id";
     private Crime crime;
     private EditText mTitleField;
     private Button mDateButton;
     private CheckBox mSolvedCheckBox;
+
+    public static CrimeFragment newInstance(UUID uuid) {
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(ARG_CRIME_ID, uuid);
+
+        CrimeFragment crimeFragment = new CrimeFragment();
+        crimeFragment.setArguments(bundle);
+        return crimeFragment;
+    }
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        crime = new Crime();
         Log.d(TAG, "onCreate: ");
+        crime = CrimeLab.getInstance(getContext()).getCrime((UUID) getArguments().getSerializable(ARG_CRIME_ID));
     }
 
     @Nullable
@@ -39,11 +51,13 @@ public class CrimeFragment extends Fragment implements TextWatcher ,CompoundButt
         Log.d(TAG, "onCreateView: ");
         View view = inflater.inflate(R.layout.fragment_crime, container, false);
         mTitleField = view.findViewById(R.id.crime_title);
+        mTitleField.setText(crime.getmTitle());
         mTitleField.addTextChangedListener(this);
         mDateButton = view.findViewById(R.id.crime_date);
         mDateButton.setText(crime.getDate());
         mDateButton.setEnabled(false);
         mSolvedCheckBox = view.findViewById(R.id.crime_solved);
+        mSolvedCheckBox.setChecked(crime.ismSolved());
         mSolvedCheckBox.setOnCheckedChangeListener(this);
         return view;
     }
@@ -60,6 +74,7 @@ public class CrimeFragment extends Fragment implements TextWatcher ,CompoundButt
 
     @Override
     public void onTextChanged(CharSequence s, int start, int before, int count) {
+        Log.d(TAG, "onTextChanged: "+ s.toString());
         crime.setmTitle(s.toString());
     }
 
@@ -71,8 +86,8 @@ public class CrimeFragment extends Fragment implements TextWatcher ,CompoundButt
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        switch (buttonView.getId()){
-            case R.id.crime_solved:{
+        switch (buttonView.getId()) {
+            case R.id.crime_solved: {
                 crime.setmSolved(isChecked);
                 break;
             }
@@ -80,6 +95,7 @@ public class CrimeFragment extends Fragment implements TextWatcher ,CompoundButt
     }
 
     private static final String TAG = "CrimeFragment";
+
     @Override
     public void onAttachFragment(Fragment childFragment) {
         super.onAttachFragment(childFragment);
