@@ -41,7 +41,7 @@ public class CrimeFragment extends Fragment implements TextWatcher ,CompoundButt
         mTitleField = view.findViewById(R.id.crime_title);
         mTitleField.addTextChangedListener(this);
         mDateButton = view.findViewById(R.id.crime_date);
-        mDateButton.setText(crime.getmDate().toString());
+        mDateButton.setText(crime.getDate());
         mDateButton.setEnabled(false);
         mSolvedCheckBox = view.findViewById(R.id.crime_solved);
         mSolvedCheckBox.setOnCheckedChangeListener(this);

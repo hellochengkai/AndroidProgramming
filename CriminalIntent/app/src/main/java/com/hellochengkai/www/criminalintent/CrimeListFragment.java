@@ -68,7 +68,7 @@ public class CrimeListFragment extends Fragment {
         {
             this.crime = crime;
             crimeTitleTV.setText(crime.getmTitle() + "   " + crime.isNeedCall110());
-            crimeTDateTV.setText(crime.getmDate().toString());
+            crimeTDateTV.setText(crime.getDate());
             if(crime.ismSolved()){
                 crimeSolvedImg.setVisibility(View.VISIBLE);
             }else {

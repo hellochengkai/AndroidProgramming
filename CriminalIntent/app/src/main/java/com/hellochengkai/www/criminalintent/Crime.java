@@ -1,6 +1,8 @@
 package com.hellochengkai.www.criminalintent;
 
+import java.text.DateFormat;
 import java.util.Date;
+import java.util.Locale;
 import java.util.UUID;
 
 /**
@@ -10,12 +12,16 @@ import java.util.UUID;
 public class Crime {
     private UUID mId;
     private String mTitle;
-    private Date mDate;
+    private String date;
     private boolean mSolved;
     private boolean needCall110;
     public Crime() {
         mId = UUID.randomUUID();
-        mDate = new Date();
+        date = DateFormat.getDateInstance(DateFormat.FULL, Locale.CHINA).format(new Date());
+    }
+
+    public String getDate() {
+        return date;
     }
 
     public UUID getmId() {
@@ -24,10 +30,6 @@ public class Crime {
 
     public String getmTitle() {
         return mTitle;
-    }
-
-    public Date getmDate() {
-        return mDate;
     }
 
     public void setmTitle(String mTitle) {
