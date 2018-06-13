@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -48,10 +49,12 @@ public class CrimeListFragment extends Fragment {
         protected Crime crime;
         private TextView crimeTitleTV;
         private TextView crimeTDateTV;
+        private ImageView crimeSolvedImg;
         public CrimeHolder(LayoutInflater inflater, ViewGroup parent) {
             super(inflater.inflate(R.layout.list_item_crime, parent, false));
             crimeTitleTV = itemView.findViewById(R.id.crime_title);
             crimeTDateTV = itemView.findViewById(R.id.crime_date);
+            crimeSolvedImg = itemView.findViewById(R.id.crime_solved);
             itemView.setOnClickListener(this);
         }
 
@@ -66,6 +69,11 @@ public class CrimeListFragment extends Fragment {
             this.crime = crime;
             crimeTitleTV.setText(crime.getmTitle() + "   " + crime.isNeedCall110());
             crimeTDateTV.setText(crime.getmDate().toString());
+            if(crime.ismSolved()){
+                crimeSolvedImg.setVisibility(View.VISIBLE);
+            }else {
+                crimeSolvedImg.setVisibility(View.GONE);
+            }
         }
 
         @Override
@@ -101,11 +109,11 @@ public class CrimeListFragment extends Fragment {
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
             Log.d(TAG, "onCreateViewHolder: " + viewType);
-            switch (viewType){
-                case CRIME_VIEW_TYPE_CALL110:{
-                    return new CrimeHolder110(layoutInflater,parent);
-                }
-            }
+//            switch (viewType){
+//                case CRIME_VIEW_TYPE_CALL110:{
+//                    return new CrimeHolder110(layoutInflater,parent);
+//                }
+//            }
             return new CrimeHolder(layoutInflater,parent);
         }
 
