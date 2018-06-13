@@ -8,4 +8,6 @@
     <string name="crime_title_label">标题</string>
     <string name="crime_details_label">描述</string>
     <string name="crime_solved_label">解决</string>
+    <string name="crime">陋习</string>
+    <string name="call_110">报警</string>
 </resources>

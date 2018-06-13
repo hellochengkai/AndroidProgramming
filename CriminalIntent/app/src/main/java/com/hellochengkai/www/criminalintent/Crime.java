@@ -12,6 +12,7 @@ public class Crime {
     private String mTitle;
     private Date mDate;
     private boolean mSolved;
+    private boolean needCall110;
     public Crime() {
         mId = UUID.randomUUID();
         mDate = new Date();
@@ -31,6 +32,14 @@ public class Crime {
 
     public void setmTitle(String mTitle) {
         this.mTitle = mTitle;
+    }
+
+    public boolean isNeedCall110() {
+        return needCall110;
+    }
+
+    public void setNeedCall110(boolean needCall110) {
+        this.needCall110 = needCall110;
     }
 
     public boolean ismSolved() {
