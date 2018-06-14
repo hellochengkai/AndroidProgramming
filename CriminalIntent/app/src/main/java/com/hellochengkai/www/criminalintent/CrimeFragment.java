@@ -44,6 +44,10 @@ public class CrimeFragment extends Fragment implements TextWatcher, CompoundButt
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate: ");
         crime = CrimeLab.getInstance(getContext()).getCrime((UUID) getArguments().getSerializable(ARG_CRIME_ID));
+        if(crime == null){
+            crime = new Crime();
+            crime.setmTitle("无效的数据");
+        }
     }
 
     @Nullable
@@ -72,14 +76,23 @@ public class CrimeFragment extends Fragment implements TextWatcher, CompoundButt
     public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
     }
+    private void returnResult()
+    {
+        Intent intent = new Intent();
+        intent.putExtra(ARG_CRIME_ID,crime.getmId());
+        getActivity().setResult(1,intent);
+    }
+
+    public static UUID getResultCrimeID(Intent intent)
+    {
+        return (UUID) intent.getSerializableExtra(ARG_CRIME_ID);
+    }
 
     @Override
     public void onTextChanged(CharSequence s, int start, int before, int count) {
         Log.d(TAG, "onTextChanged: "+ s.toString());
         crime.setmTitle(s.toString());
-        Intent intent = new Intent();
-        intent.putExtra(ARG_CRIME_ID,crime.getmId());
-        getActivity().setResult(1,intent);
+        returnResult();
     }
 
     @Override
@@ -92,7 +105,10 @@ public class CrimeFragment extends Fragment implements TextWatcher, CompoundButt
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         switch (buttonView.getId()) {
             case R.id.crime_solved: {
-                crime.setmSolved(isChecked);
+                if(isChecked != crime.ismSolved()){
+                    crime.setmSolved(isChecked);
+                    returnResult();
+                }
                 break;
             }
         }

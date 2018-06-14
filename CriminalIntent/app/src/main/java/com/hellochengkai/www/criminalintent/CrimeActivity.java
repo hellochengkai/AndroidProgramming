@@ -20,8 +20,4 @@ public class CrimeActivity extends SingleFragmentActivity {
         intent.putExtra(EXTRA_CRIME_ID, crimeId);
         return intent;
     }
-
-    public static void startCrimeActivity(Context context, UUID crimeId) {
-        context.startActivity(newIntent(context,crimeId));
-    }
 }

@@ -13,7 +13,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 import java.util.UUID;
 
 /**
@@ -33,7 +32,10 @@ public class CrimeListFragment extends Fragment {
         crimeLab = CrimeLab.getInstance(getActivity());
         View view = inflater.inflate(R.layout.fragment_crime_list, container, false);
         mCrimeRecyclerView = view.findViewById(R.id.crime_recycler_view);
-        mCrimeRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+//        linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+        mCrimeRecyclerView.setLayoutManager(linearLayoutManager);
         updataUI(null);
         return view;
     }
@@ -41,14 +43,15 @@ public class CrimeListFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        updataUI(null);
+        Log.d(TAG, "onResume: ");
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch (resultCode){
+        switch (requestCode){
             case 1:{
-
+                UUID uuid = CrimeFragment.getResultCrimeID(data);
+                updataUI(uuid);
             }
         }
     }
@@ -61,6 +64,7 @@ public class CrimeListFragment extends Fragment {
                 int position = crime.getPosition();
                 if(position > 0){
                     crimeAdapter.notifyItemChanged(position);
+                    Log.d(TAG, "updataUI: notifyItemChanged " + position);
                     return;
                 }
             }
@@ -106,23 +110,24 @@ public class CrimeListFragment extends Fragment {
 
         @Override
         public void onClick(View v) {
-            //Toast.makeText(getContext(),crime.getmTitle(),Toast.LENGTH_SHORT).show();
-            CrimeActivity.startCrimeActivity(getContext(), crime.getmId());
+            if(crime != null){
+                startActivityForResult(CrimeActivity.newIntent(getContext(),crime.getmId()),1);
+            }
         }
     }
-
-    private class CrimeHolder110 extends CrimeHolder
-            implements View.OnClickListener {
-        public CrimeHolder110(LayoutInflater inflater, ViewGroup viewGroup) {
-            super(R.layout.list_item_crime_110, inflater, viewGroup);
-        }
-
-        @Override
-        public void onClick(View v) {
-            super.onClick(v);
-            Toast.makeText(getContext(), crime.getmTitle(), Toast.LENGTH_SHORT).show();
-        }
-    }
+//
+//    private class CrimeHolder110 extends CrimeHolder
+//            implements View.OnClickListener {
+//        public CrimeHolder110(LayoutInflater inflater, ViewGroup viewGroup) {
+//            super(R.layout.list_item_crime_110, inflater, viewGroup);
+//        }
+//
+//        @Override
+//        public void onClick(View v) {
+//            super.onClick(v);
+//            Toast.makeText(getContext(), crime.getmTitle(), Toast.LENGTH_SHORT).show();
+//        }
+//    }
 
     private class CrimeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         private CrimeLab crimeLab;
@@ -132,7 +137,7 @@ public class CrimeListFragment extends Fragment {
         }
         @Override
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
+            LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
             Log.d(TAG, "onCreateViewHolder: " + viewType);
 //            switch (viewType){
 //                case CRIME_VIEW_TYPE_CALL110:{
@@ -147,10 +152,11 @@ public class CrimeListFragment extends Fragment {
             if (holder instanceof CrimeHolder) {
                 CrimeHolder crimeHolder = (CrimeHolder) holder;
                 crimeHolder.bindData(crimeLab.getCrime(position));
-            } else if (holder instanceof CrimeHolder110) {
-                CrimeHolder110 crimeHolder = (CrimeHolder110) holder;
-                crimeHolder.bindData(crimeLab.getCrime(position));
             }
+//            else if (holder instanceof CrimeHolder110) {
+//                CrimeHolder110 crimeHolder = (CrimeHolder110) holder;
+//                crimeHolder.bindData(crimeLab.getCrime(position));
+//            }
         }
 
         @Override
