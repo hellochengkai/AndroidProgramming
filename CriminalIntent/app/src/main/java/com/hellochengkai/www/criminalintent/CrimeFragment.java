@@ -24,12 +24,12 @@ import java.util.UUID;
  */
 
 public class CrimeFragment extends Fragment implements TextWatcher, CompoundButton.OnCheckedChangeListener {
+    private static final String TAG = "CrimeFragment";
     private static final String ARG_CRIME_ID = "crime_id";
     private Crime crime;
     private EditText mTitleField;
     private Button mDateButton;
     private CheckBox mSolvedCheckBox;
-
     public static CrimeFragment newInstance(UUID uuid) {
         Bundle bundle = new Bundle();
         bundle.putSerializable(ARG_CRIME_ID, uuid);
@@ -38,7 +38,6 @@ public class CrimeFragment extends Fragment implements TextWatcher, CompoundButt
         crimeFragment.setArguments(bundle);
         return crimeFragment;
     }
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -113,8 +112,6 @@ public class CrimeFragment extends Fragment implements TextWatcher, CompoundButt
             }
         }
     }
-
-    private static final String TAG = "CrimeFragment";
 
     @Override
     public void onAttachFragment(Fragment childFragment) {

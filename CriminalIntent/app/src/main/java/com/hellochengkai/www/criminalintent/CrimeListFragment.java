@@ -110,9 +110,12 @@ public class CrimeListFragment extends Fragment {
 
         @Override
         public void onClick(View v) {
-            if(crime != null){
-                startActivityForResult(CrimeActivity.newIntent(getContext(),crime.getmId()),1);
+            if(crime == null){
+                return;
             }
+//            startActivityForResult(CrimeActivity.newIntent(getContext(),crime.getmId()),1);
+//            startActivityForResult(CrimePagerActivity.newIntent(getContext(),crime.getmId()),1);
+            startActivity(CrimePagerActivity.newIntent(getContext(),crime.getmId()));
         }
     }
 //
