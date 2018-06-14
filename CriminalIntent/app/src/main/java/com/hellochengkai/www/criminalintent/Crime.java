@@ -12,18 +12,26 @@ import java.util.UUID;
 public class Crime {
     private UUID mId;
     private String mTitle;
-    private String date;
+    private Date date;
     private boolean mSolved;
     private boolean needCall110;
     private int position;
 
     public Crime() {
         mId = UUID.randomUUID();
-        date = DateFormat.getDateInstance(DateFormat.FULL, Locale.CHINA).format(new Date());
+        date = new Date();
     }
 
-    public String getDate() {
+    public String getDateStr() {
+        return DateFormat.getDateInstance(DateFormat.FULL, Locale.CHINA).format(date);
+    }
+
+    public Date getDate() {
         return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
     }
 
     public UUID getmId() {

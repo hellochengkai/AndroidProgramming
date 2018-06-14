@@ -1,11 +1,12 @@
 package com.hellochengkai.www.criminalintent;
 
 
-import android.content.Context;
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -17,15 +18,17 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 
+import java.util.Date;
 import java.util.UUID;
 
 /**
  * Created by chengkai on 18-6-12.
  */
 
-public class CrimeFragment extends Fragment implements TextWatcher, CompoundButton.OnCheckedChangeListener {
+public class CrimeFragment extends Fragment implements TextWatcher, CompoundButton.OnCheckedChangeListener,View.OnClickListener {
     private static final String TAG = "CrimeFragment";
     private static final String ARG_CRIME_ID = "crime_id";
+    private static final int REQUEST_DATE = 0;
     private Crime crime;
     private EditText mTitleField;
     private Button mDateButton;
@@ -58,8 +61,9 @@ public class CrimeFragment extends Fragment implements TextWatcher, CompoundButt
         mTitleField.setText(crime.getmTitle());
         mTitleField.addTextChangedListener(this);
         mDateButton = view.findViewById(R.id.crime_date);
-        mDateButton.setText(crime.getDate());
-        mDateButton.setEnabled(false);
+        updataDate();
+        mDateButton.setOnClickListener(this);
+//        mDateButton.setEnabled(false);
         mSolvedCheckBox = view.findViewById(R.id.crime_solved);
         mSolvedCheckBox.setChecked(crime.ismSolved());
         mSolvedCheckBox.setOnCheckedChangeListener(this);
@@ -99,7 +103,6 @@ public class CrimeFragment extends Fragment implements TextWatcher, CompoundButt
 
     }
 
-
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         switch (buttonView.getId()) {
@@ -112,70 +115,35 @@ public class CrimeFragment extends Fragment implements TextWatcher, CompoundButt
             }
         }
     }
-
+    private static final String DIALOG_DATE = "DialogDate";
     @Override
-    public void onAttachFragment(Fragment childFragment) {
-        super.onAttachFragment(childFragment);
-        Log.d(TAG, "onAttachFragment: ");
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.crime_date:{
+                FragmentManager fragmentManager = getFragmentManager();
+                DatePickerFragment datePickerFragment = DatePickerFragment.newInstance(crime.getDate());
+                datePickerFragment.setTargetFragment(this,REQUEST_DATE);
+                datePickerFragment.show(fragmentManager,DIALOG_DATE);
+                break;
+            }
+        }
     }
 
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        Log.d(TAG, "onAttach: ");
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(resultCode != Activity.RESULT_OK) {
+            return;
+        }
+        switch (requestCode){
+            case REQUEST_DATE:{
+                Date date = (Date) data.getSerializableExtra(DatePickerFragment.Extra_DATE);
+                crime.setDate(date);
+                updataDate();
+            }
+        }
     }
 
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        Log.d(TAG, "onViewCreated: ");
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        Log.d(TAG, "onActivityCreated: ");
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        Log.d(TAG, "onStart: ");
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        Log.d(TAG, "onResume: ");
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        Log.d(TAG, "onPause: ");
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        Log.d(TAG, "onStop: ");
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        Log.d(TAG, "onDestroyView: ");
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        Log.d(TAG, "onDestroy: ");
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        Log.d(TAG, "onDetach: ");
+    private void updataDate() {
+        mDateButton.setText(crime.getDateStr());
     }
 }
