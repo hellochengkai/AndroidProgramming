@@ -2,9 +2,8 @@ package com.hellochengkai.www.criminalintent;
 
 import android.content.Context;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -12,11 +11,10 @@ import java.util.UUID;
  */
 
 public class CrimeLab {
-    private List crimeList = new ArrayList();
     Context context;
-
+    private Map<UUID,Crime> uuidCrimeMap = new HashMap<>();
+    private Map<Integer,Crime> positionCrimeMap = new HashMap<>();
     private CrimeLab(Context context) {
-        crimeList = new ArrayList<Crime>();
         this.context = context;
         for (int i = 0; i < 100; i++) {
             StringBuilder stringBuilder = new StringBuilder();
@@ -27,12 +25,13 @@ public class CrimeLab {
             crime.setmTitle(stringBuilder.toString());
             crime.setmSolved(i % 2 == 0);
             crime.setNeedCall110(i % 5 == 0);
-            crimeList.add(crime);
+            crime.setPosition(i);
+            uuidCrimeMap.put(crime.getmId(),crime);
+            positionCrimeMap.put(crime.getPosition(),crime);
         }
     }
 
     private static CrimeLab instance;
-
     public static CrimeLab getInstance(Context context) {
         if (instance == null) {
             synchronized (CrimeLab.class) {
@@ -44,18 +43,13 @@ public class CrimeLab {
         return instance;
     }
 
-    public List<Crime> getCrimeList() {
-        return crimeList;
-    }
-
     public Crime getCrime(UUID id) {
-        Iterator iterator = crimeList.iterator();
-        while (iterator.hasNext()) {
-            Crime crime = (Crime) iterator.next();
-            if (crime.getmId().equals(id)) {
-                return crime;
-            }
-        }
-        return null;
+        return uuidCrimeMap.get(id);
+    }
+    public Crime getCrime(int position) {
+        return positionCrimeMap.get(position);
+    }
+    public int size(){
+        return positionCrimeMap.size();
     }
 }

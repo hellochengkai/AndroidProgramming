@@ -18,17 +18,20 @@ public class Crime implements Parcelable {
     private String date;
     private boolean mSolved;
     private boolean needCall110;
+    private int position;
 
     public Crime() {
         mId = UUID.randomUUID();
         date = DateFormat.getDateInstance(DateFormat.FULL, Locale.CHINA).format(new Date());
     }
 
+
     protected Crime(Parcel in) {
         mTitle = in.readString();
         date = in.readString();
         mSolved = in.readByte() != 0;
         needCall110 = in.readByte() != 0;
+        position = in.readInt();
     }
 
     public static final Creator<Crime> CREATOR = new Creator<Crime>() {
@@ -82,9 +85,19 @@ public class Crime implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+
         dest.writeString(mTitle);
         dest.writeString(date);
         dest.writeByte((byte) (mSolved ? 1 : 0));
         dest.writeByte((byte) (needCall110 ? 1 : 0));
+        dest.writeInt(position);
+    }
+
+    public int getPosition() {
+        return position;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
     }
 }

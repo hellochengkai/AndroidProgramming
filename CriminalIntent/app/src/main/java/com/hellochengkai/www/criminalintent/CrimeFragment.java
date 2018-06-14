@@ -2,6 +2,7 @@ package com.hellochengkai.www.criminalintent;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -76,6 +77,9 @@ public class CrimeFragment extends Fragment implements TextWatcher, CompoundButt
     public void onTextChanged(CharSequence s, int start, int before, int count) {
         Log.d(TAG, "onTextChanged: "+ s.toString());
         crime.setmTitle(s.toString());
+        Intent intent = new Intent();
+        intent.putExtra(ARG_CRIME_ID,crime.getmId());
+        getActivity().setResult(1,intent);
     }
 
     @Override

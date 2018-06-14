@@ -11,13 +11,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import java.util.Iterator;
-import java.util.List;
 import java.util.UUID;
 
 /**
@@ -27,13 +23,14 @@ import java.util.UUID;
 public class CrimeListFragment extends Fragment {
     private static final String TAG = CrimeListFragment.class.getSimpleName();
     private RecyclerView mCrimeRecyclerView;
-
+    private CrimeLab crimeLab;
     private static final int CRIME_VIEW_TYPE_DEF = 0;
     private static final int CRIME_VIEW_TYPE_CALL110 = 1;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        crimeLab = CrimeLab.getInstance(getActivity());
         View view = inflater.inflate(R.layout.fragment_crime_list, container, false);
         mCrimeRecyclerView = view.findViewById(R.id.crime_recycler_view);
         mCrimeRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -47,18 +44,29 @@ public class CrimeListFragment extends Fragment {
         updataUI(null);
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (resultCode){
+            case 1:{
+
+            }
+        }
+    }
+
     private void updataUI(UUID uuid) {
         CrimeAdapter crimeAdapter = (CrimeAdapter) mCrimeRecyclerView.getAdapter();
         if(crimeAdapter != null){
-            int position = crimeAdapter.getPosition(uuid);
-            if(position > 0){
-                crimeAdapter.notifyItemChanged(position);
-            }else {
-                crimeAdapter.notifyDataSetChanged();
+            Crime crime = crimeLab.getCrime(uuid);
+            if(crime != null){
+                int position = crime.getPosition();
+                if(position > 0){
+                    crimeAdapter.notifyItemChanged(position);
+                    return;
+                }
             }
+            crimeAdapter.notifyDataSetChanged();
         }else {
-            CrimeLab crimeLab = CrimeLab.getInstance(getActivity());
-            crimeAdapter = new CrimeAdapter(crimeLab.getCrimeList());
+            crimeAdapter = new CrimeAdapter(crimeLab);
             mCrimeRecyclerView.setAdapter(crimeAdapter);
         }
     }
@@ -117,26 +125,10 @@ public class CrimeListFragment extends Fragment {
     }
 
     private class CrimeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-        private List<Crime> mCrimes;
+        private CrimeLab crimeLab;
 
-        public CrimeAdapter(List<Crime> crimes) {
-            mCrimes = crimes;
-        }
-        public int getPosition(UUID uuid)
-        {
-            if(uuid == null)
-                return -1;
-            int i = 0;
-            Iterator iterator = mCrimes.iterator();
-            while (iterator.hasNext()){
-                Crime crime = (Crime) iterator.next();
-                if(crime.getmId().equals(uuid)){
-                    return i;
-                }else {
-                    i++;
-                }
-            }
-            return -1;
+        public CrimeAdapter(CrimeLab crimeLab) {
+            this.crimeLab = crimeLab;
         }
         @Override
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -154,21 +146,21 @@ public class CrimeListFragment extends Fragment {
         public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
             if (holder instanceof CrimeHolder) {
                 CrimeHolder crimeHolder = (CrimeHolder) holder;
-                crimeHolder.bindData(mCrimes.get(position));
+                crimeHolder.bindData(crimeLab.getCrime(position));
             } else if (holder instanceof CrimeHolder110) {
                 CrimeHolder110 crimeHolder = (CrimeHolder110) holder;
-                crimeHolder.bindData(mCrimes.get(position));
+                crimeHolder.bindData(crimeLab.getCrime(position));
             }
         }
 
         @Override
         public int getItemCount() {
-            return mCrimes.size();
+            return crimeLab.size();
         }
 
         @Override
         public int getItemViewType(int position) {
-            if (mCrimes.get(position).isNeedCall110()) {
+            if (crimeLab.getCrime(position).isNeedCall110()) {
                 return CRIME_VIEW_TYPE_CALL110;
             }
             return CRIME_VIEW_TYPE_DEF;

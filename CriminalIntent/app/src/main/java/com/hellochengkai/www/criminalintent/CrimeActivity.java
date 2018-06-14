@@ -14,9 +14,14 @@ public class CrimeActivity extends SingleFragmentActivity {
         return CrimeFragment.newInstance(id);
     }
 
-    public static void startCrimeActivity(Context context, UUID crimeId) {
+    public static Intent newIntent(Context context, UUID crimeId)
+    {
         Intent intent = new Intent(context, CrimeActivity.class);
         intent.putExtra(EXTRA_CRIME_ID, crimeId);
-        context.startActivity(intent);
+        return intent;
+    }
+
+    public static void startCrimeActivity(Context context, UUID crimeId) {
+        context.startActivity(newIntent(context,crimeId));
     }
 }
