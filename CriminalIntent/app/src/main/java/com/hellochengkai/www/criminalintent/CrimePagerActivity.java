@@ -7,27 +7,24 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.widget.Button;
-import android.widget.FrameLayout;
-import android.widget.TextView;
 
-import java.util.Random;
 import java.util.UUID;
 
 /**
  * Created by chengkai on 18-6-14.
  */
 
-public class CrimePagerActivity extends AppCompatActivity{
+public class CrimePagerActivity extends AppCompatActivity implements View.OnClickListener{
     private static final String TAG = "CrimePagerActivity";
     private static final String EXTRA_CRIME_ID = "com.hellochengkai.www.criminalintent.crime_id";
 
     private CrimeLab crimeLab;
     private ViewPager viewPager;
-
+    private Button firstButton,lastButton;
     public static Intent newIntent(Context context, UUID crimeId)
     {
         Intent intent = new Intent(context, CrimePagerActivity.class);
@@ -41,6 +38,8 @@ public class CrimePagerActivity extends AppCompatActivity{
         setContentView(R.layout.activity_crime_pager);
         crimeLab = CrimeLab.getInstance(this);
         viewPager = findViewById(R.id.crime_view_pager);
+        firstButton = findViewById(R.id.jump_to_first);
+        lastButton = findViewById(R.id.jump_to_last);
         FragmentManager fragmentManager = getSupportFragmentManager();
         viewPager.setAdapter(new FragmentPagerAdapter(fragmentManager) {
             @Override
@@ -57,5 +56,21 @@ public class CrimePagerActivity extends AppCompatActivity{
         UUID crimeId = (UUID) getIntent()
                 .getSerializableExtra(EXTRA_CRIME_ID);
         viewPager.setCurrentItem(crimeLab.getCrime(crimeId).getPosition());
+        firstButton.setOnClickListener(this);
+        lastButton.setOnClickListener(this);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.jump_to_first:{
+                viewPager.setCurrentItem(0);
+                break;
+            }
+            case R.id.jump_to_last:{
+                viewPager.setCurrentItem(crimeLab.size() - 1);
+                break;
+            }
+        }
     }
 }

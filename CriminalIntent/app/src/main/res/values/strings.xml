@@ -6,6 +6,8 @@
     <string name="crime_solved_label">Solved</string>
     <string name="crime">Crime</string>
     <string name="call_110">Call 110</string>
+    <string name="jump_to_first">First</string>
+    <string name="jump_to_last">Last</string>
 
     <!--<string name="crime_title_hint">输入一个陋习标题.</string>-->
     <!--<string name="crime_title_label">标题</string>-->
