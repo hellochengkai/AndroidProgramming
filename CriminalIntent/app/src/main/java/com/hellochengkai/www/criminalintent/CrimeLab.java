@@ -16,7 +16,7 @@ public class CrimeLab {
     private Map<Integer,Crime> positionCrimeMap = new HashMap<>();
     private CrimeLab(Context context) {
         this.context = context;
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 5; i++) {
             StringBuilder stringBuilder = new StringBuilder();
             Crime crime = new Crime();
             stringBuilder.append(context.getResources().getString(R.string.crime))
@@ -51,5 +51,10 @@ public class CrimeLab {
     }
     public int size(){
         return positionCrimeMap.size();
+    }
+    public void addCrime(Crime crime){
+        crime.setPosition(positionCrimeMap.size());
+        positionCrimeMap.put(crime.getPosition(),crime);
+        uuidCrimeMap.put(crime.getmId(),crime);
     }
 }

@@ -11,6 +11,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 
 import java.util.UUID;
 
@@ -24,7 +25,8 @@ public class CrimePagerActivity extends AppCompatActivity implements View.OnClic
 
     private CrimeLab crimeLab;
     private ViewPager viewPager;
-    private Button firstButton,lastButton;
+    private ImageButton firstButton,lastButton;
+    private Button saveCrimeButton;
     public static Intent newIntent(Context context, UUID crimeId)
     {
         Intent intent = new Intent(context, CrimePagerActivity.class);
@@ -40,6 +42,8 @@ public class CrimePagerActivity extends AppCompatActivity implements View.OnClic
         viewPager = findViewById(R.id.crime_view_pager);
         firstButton = findViewById(R.id.jump_to_first);
         lastButton = findViewById(R.id.jump_to_last);
+        saveCrimeButton = findViewById(R.id.crime_save);
+        saveCrimeButton.setOnClickListener(this);
         FragmentManager fragmentManager = getSupportFragmentManager();
         viewPager.setAdapter(new FragmentPagerAdapter(fragmentManager) {
             @Override
@@ -69,6 +73,10 @@ public class CrimePagerActivity extends AppCompatActivity implements View.OnClic
             }
             case R.id.jump_to_last:{
                 viewPager.setCurrentItem(crimeLab.size() - 1);
+                break;
+            }
+            case R.id.crime_save:{
+                finish();
                 break;
             }
         }
